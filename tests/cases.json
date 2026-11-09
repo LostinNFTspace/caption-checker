@@ -1,0 +1,14 @@
+{"rows": [
+ ["BERZINS Karlis","LAT","Player"],["kalnina ilze","LAT","Player"],["Martins Klavins","LAT","Player"],
+ ["Elina  Steinberga ","LAT","Player"],["Rudolfs Petersons","LAT","Commentator guest"],["Agnese Gegere","LAT","Player"],
+ ["Janis Liepins","LAT","Player"],["Lukasz Kowalski","POL","Player"],["HRUSKA Ondrej","CZE","Player"],
+ ["Soren Mikkelsen","DEN","Player"],["Lucia Ferrand","ESP","Umpire"],["Kārlis Bērziņš","LAT","Player"],
+ ["Maximilian Alexander Hoffmann-Schneider","GER","Player"],["Peter Smith","GBR","Player"],
+ ["Berzins, Karlis","lv","player"],["O'NEILL sean","IRL","PLAYER"],["mcdonald ronald","USA","umpire"],
+ ["ĢERmaNis Niklāvs","Latvia","Player"],["", "LAT", "Player"],["   ","",""],["Jean-Luc PICARD","FRA","Player"],
+ ["VAN DER BERG Jan","NED","Player"],["Neymar","BRA","Player"],["ALL CAPS NAME","GBR","Player"],
+ ["Anna\tOzola","LATVIJA","Player"],["Anna Ozola","LAT","Player"],["R2D2 Robot","USA","Player"],
+ ["kārlis bērziņš","LAT","commentator GUEST"],["Smith Peter","GBR","Player"],["Ondřej Hruška","CZE","Player"]
+],
+"ref": ["Kārlis Bērziņš","Ilze Kalniņa","Mārtiņš Kļaviņš","Elīna Šteinberga","Rūdolfs Pētersons","Agnese Ģēģere",
+ "Łukasz Kowalski","Ondřej Hruška","Søren Mikkelsen","Lucía Ferrand","Peter Smith", "  ", "Anna Ozola"]}
