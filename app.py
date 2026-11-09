@@ -20,12 +20,11 @@ div[data-testid="stMetricValue"]{font-size:1.7rem}
 .strap .r{display:block;background:#fff;color:#0b1f3a;font-size:13px;padding:3px 14px;border:1px solid #d1d5db;border-top:0}
 </style>""", unsafe_allow_html=True)
 
-# Row colours: soft pastels on the light theme, deep tones on the dark theme (the app follows the
-# viewer's system setting; the ⋮ menu → Settings switches it)
-DARK = getattr(getattr(st.context, "theme", None), "type", "light") == "dark"
-COLORS = ({"held": "#5b2326", "FIXED": "#4d4115", "NEW": "#1f3b5c", "OK": "#1f4a2c"} if DARK else
-          {"held": "#f4cccc", "FIXED": "#fff2cc", "NEW": "#cfe2f3", "OK": "#d9ead3"})
-TEXT = "#f3f4f6" if DARK else "#111827"
+# Row colours: see-through tints, so they read on both the light and the dark theme and stay right
+# when the viewer switches theme mid-session (⋮ menu → Settings). Text keeps the theme's own colour.
+COLORS = {"held": "rgba(220,38,38,.28)", "FIXED": "rgba(234,179,8,.30)",
+          "NEW": "rgba(59,130,246,.28)", "OK": "rgba(34,197,94,.26)"}
+TEXT = "inherit"
 START_COLS = ["Name (as received)", "Country", "Role"]
 
 st.title("Caption name checker")
@@ -121,7 +120,7 @@ table = pd.DataFrame([{"Row": n, "As received": r["original"], "Clean name": r["
 def colour(row):
     s = row["Status"]
     key = "held" if any(h in s for h in checker.HELD_BACK) else "FIXED" if "FIXED" in s else "NEW" if "NEW" in s else "OK"
-    return [f"background-color:{COLORS[key]};color:{TEXT}"] * len(row)
+    return [f"background-color:{COLORS[key]}"] * len(row)
 
 
 st.dataframe(table.style.apply(colour, axis=1), hide_index=True, width="stretch", height=35 * (len(table) + 1) + 3,
