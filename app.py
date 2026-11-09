@@ -20,7 +20,12 @@ div[data-testid="stMetricValue"]{font-size:1.7rem}
 .strap .r{display:block;background:#fff;color:#0b1f3a;font-size:13px;padding:3px 14px;border:1px solid #d1d5db;border-top:0}
 </style>""", unsafe_allow_html=True)
 
-COLORS = {"held": "#f4cccc", "FIXED": "#fff2cc", "NEW": "#cfe2f3", "OK": "#d9ead3"}
+# Row colours: soft pastels on the light theme, deep tones on the dark theme (the app follows the
+# viewer's system setting; the ⋮ menu → Settings switches it)
+DARK = getattr(getattr(st.context, "theme", None), "type", "light") == "dark"
+COLORS = ({"held": "#5b2326", "FIXED": "#4d4115", "NEW": "#1f3b5c", "OK": "#1f4a2c"} if DARK else
+          {"held": "#f4cccc", "FIXED": "#fff2cc", "NEW": "#cfe2f3", "OK": "#d9ead3"})
+TEXT = "#f3f4f6" if DARK else "#111827"
 START_COLS = ["Name (as received)", "Country", "Role"]
 
 st.title("Caption name checker")
@@ -80,7 +85,7 @@ with b.popover("Upload my own list (CSV or Excel)"):
 st.markdown('<p class="small">Edit cells directly, paste rows from a spreadsheet, or add rows at the bottom.</p>',
             unsafe_allow_html=True)
 start = st.data_editor(st.session_state.start, num_rows="dynamic", width="stretch", hide_index=True,
-                       height=36 * (len(st.session_state.start) + 2) + 4,
+                       height=36 * (len(st.session_state.start) + 3) + 4,
                        key=f"start{st.session_state.ver}",
                        column_config={START_COLS[0]: st.column_config.TextColumn(width="large")})
 
@@ -88,7 +93,7 @@ with st.expander(f"Reference names: the correct spellings ({len(st.session_state
     st.markdown('<p class="small">The broadcaster\'s master list. A name that matches one of these, ignoring capitals, '
                 "missing diacritics and name order, is replaced by the exact spelling here.</p>", unsafe_allow_html=True)
     ref = st.data_editor(st.session_state.ref, num_rows="dynamic", width="stretch", hide_index=True,
-                         key=f"ref{st.session_state.ver}")
+                         height=36 * (len(st.session_state.ref) + 3) + 4, key=f"ref{st.session_state.ver}")
     max_len = st.number_input("Longest caption that fits the name strap (characters)", 10, 40, checker.MAX_CAPTION)
 
 # ------------------------------------------------------------------ check
@@ -116,16 +121,19 @@ table = pd.DataFrame([{"Row": n, "As received": r["original"], "Clean name": r["
 def colour(row):
     s = row["Status"]
     key = "held" if any(h in s for h in checker.HELD_BACK) else "FIXED" if "FIXED" in s else "NEW" if "NEW" in s else "OK"
-    return [f"background-color:{COLORS[key]};color:#111827"] * len(row)
+    return [f"background-color:{COLORS[key]};color:{TEXT}"] * len(row)
 
 
 st.dataframe(table.style.apply(colour, axis=1), hide_index=True, width="stretch", height=35 * (len(table) + 1) + 3,
-             column_config={"Why": st.column_config.TextColumn(width="large")})
+             column_config={"Row": st.column_config.NumberColumn(width=45),
+                            "Role": st.column_config.TextColumn(width=130),
+                            "Status": st.column_config.TextColumn(width=140),
+                            "Why": st.column_config.TextColumn(width="large")})
 st.markdown('<p class="small">'
-            '<span style="background:#fff2cc;padding:1px 6px">FIXED</span> spelling, letters or order restored from the reference list · '
-            '<span style="background:#cfe2f3;padding:1px 6px">NEW</span> not in the reference list: confirm, then add it · '
-            '<span style="background:#f4cccc;padding:1px 6px">CHECK / DUPLICATE / TOO LONG</span> held back from the export · '
-            '<span style="background:#d9ead3;padding:1px 6px">OK</span> already correct</p>', unsafe_allow_html=True)
+            f'<span style="background:{COLORS["FIXED"]};color:{TEXT};padding:1px 6px">FIXED</span> spelling, letters or order restored from the reference list · '
+            f'<span style="background:{COLORS["NEW"]};color:{TEXT};padding:1px 6px">NEW</span> not in the reference list: confirm, then add it · '
+            f'<span style="background:{COLORS["held"]};color:{TEXT};padding:1px 6px">CHECK / DUPLICATE / TOO LONG</span> held back from the export · '
+            f'<span style="background:{COLORS["OK"]};color:{TEXT};padding:1px 6px">OK</span> already correct</p>', unsafe_allow_html=True)
 
 # ------------------------------------------------------------------ preview + export
 ready = checker.export_rows(results)
