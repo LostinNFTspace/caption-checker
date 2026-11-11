@@ -12,6 +12,8 @@ import checker
 
 st.set_page_config(page_title="Caption name checker", page_icon="🔤", layout="wide")
 st.markdown("""<style>
+/* keep the page a readable width on big monitors (the results table needs a little more room) */
+.block-container{max-width:1400px}
 div[data-testid="stMetricValue"]{font-size:1.7rem}
 .small{color:#6b7280;font-size:.9rem}
 .strap{display:inline-block;margin:6px 12px 6px 0;font-family:Arial,Helvetica,sans-serif}
