@@ -4,6 +4,7 @@ Paste or upload a start list -> clean names and on-screen captions, with every c
 and anything uncertain held back from the graphics export.
 """
 import html
+import os
 
 import pandas as pd
 import streamlit as st
@@ -29,23 +30,29 @@ COLORS = {"held": "rgba(220,38,38,.28)", "FIXED": "rgba(234,179,8,.30)",
 TEXT = "inherit"
 START_COLS = ["Name (as received)", "Country", "Role"]
 
-st.title("Caption name checker")
-st.markdown(
-    "Before player names go on screen as captions, start lists arrive in every format: ALL CAPS, "
-    "SURNAME first, missing Latvian letters, double spaces, the same player twice. "
-    "This checker **cleans every name, makes the on-screen caption** (e.g. *K. Bērziņš*), **explains every change**, "
-    "and **holds back anything uncertain** so a wrong name never reaches the graphics."
-)
-st.caption("Demo: the names are invented examples. Built first as a Google Sheets tool; this web version uses the same rules.")
 
-with st.expander("Try this in 60 seconds", expanded=True):
-    st.markdown(
-        "1. Look at the result below: **BERZINS Karlis** became **Kārlis Bērziņš**, and the second copy of him is held back as a duplicate.\n"
-        "2. Add a row to the start list: type `ozolins janis` with country `lat`. It turns **red (CHECK)**: a Latvian name without "
-        "Latvian letters that isn't in the reference list, so a human must confirm the spelling.\n"
-        "3. Open **Reference names**, add `Jānis Ozoliņš` and watch the same row turn **yellow (FIXED)** with the right spelling.\n"
-        "4. Download the clean list for the graphics system at the bottom. Red rows are left out of it."
-    )
+# --- demo strip: a 1-minute video and a short how-to, so a first-time visitor knows what this is
+PORTFOLIO = "https://janis-saulitis-portfolio.netlify.app"
+DEMO_VIDEO = os.environ.get("DEMO_VIDEO", PORTFOLIO + "/media/captions.mp4")
+
+
+@st.dialog("Caption name checker in 1 minute", width="large")
+def show_demo():
+    st.video(DEMO_VIDEO, autoplay=True)
+
+
+def demo_strip():
+    bar = st.container(horizontal=True)
+    if bar.button("▶ 1-min demo", type="primary", key="demo_btn"):
+        show_demo()
+    with bar.popover("How it works"):
+        st.markdown('1. The sample list below is already checked: **BERZINS Karlis** became **Kārlis Bērziņš**, the duplicate is held back.\n2. Add a row: `ozolins janis`, country `lat`. It turns **red**: a human must confirm the spelling.\n3. Add `Jānis Ozoliņš` under **Reference names** and the row turns **yellow (FIXED)**.\n4. Download the clean list at the bottom. Red rows are left out.')
+
+
+st.title("Caption name checker")
+st.markdown("**Fixes misspelled player names before they go on screen**, and holds back anything uncertain.")
+demo_strip()
+st.caption("Names are invented examples.")
 
 # ------------------------------------------------------------------ input
 def sample_frames():
