@@ -46,7 +46,7 @@ def demo_strip():
     if bar.button("▶ 1-min demo", type="primary", key="demo_btn"):
         show_demo()
     with bar.popover("How it works"):
-        st.markdown('1. The sample list below is already checked: **BERZINS Karlis** became **Kārlis Bērziņš**, the duplicate is held back.\n2. Add a row: `ozolins janis`, country `lat`. It turns **red**: a human must confirm the spelling.\n3. Add `Jānis Ozoliņš` under **Reference names** and the row turns **yellow (FIXED)**.\n4. Download the clean list at the bottom. Red rows are left out.')
+        st.markdown('1. The sample list below is already checked: `BERZINS Karlis` became `Kārlis Bērziņš`, the duplicate is held back.\n2. Add a row: `ozolins janis`, country `lat`. It turns **red**: a human must confirm the spelling.\n3. Add `Jānis Ozoliņš` under **Reference names** and the row turns **yellow (FIXED)**.\n4. Download the clean list at the bottom. Red rows are left out.')
 
 
 st.title("Caption name checker")
